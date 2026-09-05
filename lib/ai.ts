@@ -11,7 +11,7 @@ const DIFFICULTY_GUIDANCE: Record<string, string> = {
   EXPERT: "nuanced, strategic-level knowledge combining multiple facts about the client relationship",
 };
 
-const GEMINI_MODEL = "gemini-3-flash";
+const GEMINI_MODEL = "gemini-2.0-flash";
 
 export async function generateQuestions(
   clientName: string,
