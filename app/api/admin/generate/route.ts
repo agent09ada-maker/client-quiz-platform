@@ -21,9 +21,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Client not found." }, { status: 404 });
   }
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!process.env.GEMINI_API_KEY) {
     return NextResponse.json(
-      { error: "ANTHROPIC_API_KEY is not configured on the server yet. Add it in your hosting provider's environment variables." },
+      { error: "GEMINI_API_KEY is not configured on the server yet. Add it in your hosting provider's environment variables." },
       { status: 500 }
     );
   }

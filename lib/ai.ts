@@ -1,9 +1,3 @@
-import Anthropic from "@anthropic-ai/sdk";
-
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
-
 export type DraftQuestion = {
   prompt: string;
   options: string[];
@@ -17,24 +11,20 @@ const DIFFICULTY_GUIDANCE: Record<string, string> = {
   EXPERT: "nuanced, strategic-level knowledge combining multiple facts about the client relationship",
 };
 
-/**
- * Generates a fresh batch of draft quiz questions for a client at a given
- * difficulty. Questions come back as PENDING_REVIEW — an admin must approve
- * them before employees ever see them (see /app/admin/questions).
- */
+const GEMINI_MODEL = "gemini-3-flash";
+
 export async function generateQuestions(
   clientName: string,
   clientSummary: string,
   difficulty: keyof typeof DIFFICULTY_GUIDANCE,
   count: number
 ): Promise<DraftQuestion[]> {
-  const message = await anthropic.messages.create({
-    model: "claude-sonnet-4-6",
-    max_tokens: 2000,
-    messages: [
-      {
-        role: "user",
-        content: `You are writing internal training quiz questions for employees to learn about a client account.
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error("GEMINI_API_KEY is not configured.");
+  }
+
+  const prompt = `You are writing internal training quiz questions for employees to learn about a client account.
 
 Client name: ${clientName}
 Client background: ${clientSummary || "(no additional background provided)"}
@@ -43,17 +33,35 @@ Difficulty level: ${difficulty} — questions should be ${DIFFICULTY_GUIDANCE[di
 Write exactly ${count} multiple-choice questions. Each question must have exactly 4 options with exactly one correct answer.
 
 Respond with ONLY a JSON array, no preamble, no markdown fences, in this exact shape:
-[{"prompt": "...", "options": ["...", "...", "...", "..."], "correctIndex": 0}]`,
-      },
-    ],
-  });
+[{"prompt": "...", "options": ["...", "...", "...", "..."], "correctIndex": 0}]`;
 
-  const textBlock = message.content.find((b) => b.type === "text");
-  if (!textBlock || textBlock.type !== "text") {
-    throw new Error("AI did not return text content");
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": apiKey,
+      },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { responseMimeType: "application/json" },
+      }),
+    }
+  );
+
+  if (!res.ok) {
+    const errText = await res.text().catch(() => "");
+    throw new Error(`Gemini API error (${res.status}): ${errText}`);
   }
 
-  const cleaned = textBlock.text.replace(/```json|```/g, "").trim();
+  const data = await res.json();
+  const text: string | undefined = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) {
+    throw new Error("Gemini did not return text content");
+  }
+
+  const cleaned = text.replace(/```json|```/g, "").trim();
   const parsed = JSON.parse(cleaned) as DraftQuestion[];
 
   return parsed.filter(
