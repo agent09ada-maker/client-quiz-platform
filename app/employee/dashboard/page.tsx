@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { db } from "@/lib/db";
 import { requireEmployee } from "@/lib/session";
 import LogoutButton from "@/app/employee/LogoutButton";
@@ -24,7 +25,11 @@ export default async function EmployeeDashboard() {
     <div className="app-shell">
       <div className="topbar">
         <div className="topbar-inner">
-          <h1>Client Knowledge Quiz <span className="role-tag">Employee</span></h1>
+          <div className="brand-mark">
+            <Image src="/logo.png" alt="" width={32} height={32} />
+            <span>Client Knowledge Quiz</span>
+            <span className="role-tag">Employee</span>
+          </div>
           <LogoutButton />
         </div>
       </div>
@@ -43,10 +48,15 @@ export default async function EmployeeDashboard() {
           <div className="grid grid-2">
             {clients.map((client) => (
               <div key={client.id} className="card">
-                <h3 style={{ fontSize: 18, marginBottom: 6 }}>{client.name}</h3>
-                <p style={{ color: "var(--text-muted)", fontSize: 14, minHeight: 36 }}>
-                  {client.summary || "No background summary yet."}
-                </p>
+                <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                  <div className="client-avatar">{client.name.charAt(0).toUpperCase()}</div>
+                  <div style={{ flex: 1 }}>
+                    <h3 style={{ fontSize: 18, marginBottom: 4 }}>{client.name}</h3>
+                    <p style={{ color: "var(--text-muted)", fontSize: 14, minHeight: 36, margin: 0 }}>
+                      {client.summary || "No background summary yet."}
+                    </p>
+                  </div>
+                </div>
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12 }}>
                   {DIFFICULTIES.map((d) => (
                     <Link

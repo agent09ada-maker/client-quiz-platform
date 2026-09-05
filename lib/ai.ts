@@ -13,6 +13,12 @@ const DIFFICULTY_GUIDANCE: Record<string, string> = {
 
 const GEMINI_MODEL = "gemini-3.6-flash";
 
+/**
+ * Generates a fresh batch of draft quiz questions for a client at a given
+ * difficulty, using Google's Gemini API (free tier). Questions come back as
+ * PENDING_REVIEW — an admin must approve them before employees ever see them
+ * (see /app/admin/questions).
+ */
 export async function generateQuestions(
   clientName: string,
   clientSummary: string,

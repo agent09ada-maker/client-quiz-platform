@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/session";
 import AdminShell from "../AdminShell";
+import { IconPeople, IconBuilding, IconClipboard } from "@/app/components/icons";
 
 export default async function AdminDashboard() {
   await requireAdmin();
@@ -29,17 +30,26 @@ export default async function AdminDashboard() {
         </div>
 
         <div className="grid grid-3">
-          <div className="card">
-            <div className="stat-num">{employeeCount}</div>
-            <div className="stat-label">Active employees</div>
+          <div className="card stat-card">
+            <div className="stat-icon"><IconPeople /></div>
+            <div>
+              <div className="stat-num">{employeeCount}</div>
+              <div className="stat-label">Active employees</div>
+            </div>
           </div>
-          <div className="card">
-            <div className="stat-num">{clientCount}</div>
-            <div className="stat-label">Active clients</div>
+          <div className="card stat-card">
+            <div className="stat-icon"><IconBuilding /></div>
+            <div>
+              <div className="stat-num">{clientCount}</div>
+              <div className="stat-label">Active clients</div>
+            </div>
           </div>
-          <div className="card">
-            <div className="stat-num">{pendingCount}</div>
-            <div className="stat-label">Questions awaiting review</div>
+          <div className="card stat-card">
+            <div className="stat-icon"><IconClipboard /></div>
+            <div>
+              <div className="stat-num">{pendingCount}</div>
+              <div className="stat-label">Questions awaiting review</div>
+            </div>
           </div>
         </div>
 

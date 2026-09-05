@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import LogoutButton from "./LogoutButton";
 
 const NAV = [
@@ -20,7 +21,11 @@ export default function AdminShell({
     <div className="app-shell">
       <div className="topbar">
         <div className="topbar-inner">
-          <h1>Client Knowledge Quiz <span className="role-tag">Admin</span></h1>
+          <div className="brand-mark">
+            <Image src="/logo.png" alt="" width={32} height={32} />
+            <span>Client Knowledge Quiz</span>
+            <span className="role-tag">Admin</span>
+          </div>
           <LogoutButton />
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -31,7 +32,12 @@ export default function AdminLoginPage() {
 
   return (
     <main className="auth-screen">
+      <div className="auth-glow one" />
+      <div className="auth-glow two" />
       <form className="auth-card" onSubmit={handleSubmit}>
+        <div className="logo-row">
+          <Image src="/logo.png" alt="ADA Tech Solutions" width={64} height={64} />
+        </div>
         <h1>Admin sign in</h1>
         <p className="sub">Restricted to authorized administrators.</p>
 

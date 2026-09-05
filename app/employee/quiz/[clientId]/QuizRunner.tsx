@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 type Question = { id: string; prompt: string; options: string[] };
 
@@ -56,7 +57,11 @@ export default function QuizRunner({
     <div className="app-shell">
       <div className="topbar">
         <div className="topbar-inner">
-          <h1>{clientName} <span className="role-tag">{difficulty}</span></h1>
+          <div className="brand-mark">
+            <Image src="/logo.png" alt="" width={28} height={28} />
+            <span>{clientName}</span>
+            <span className="role-tag">{difficulty}</span>
+          </div>
         </div>
       </div>
       <div className="page" style={{ maxWidth: 640 }}>
