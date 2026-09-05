@@ -1,0 +1,72 @@
+// Prisma schema for the Client Knowledge Quiz Platform
+// Dev default: SQLite (zero setup). For production (Vercel), switch
+// provider to "postgresql" and set DATABASE_URL to a free Neon/Supabase
+// connection string. See README.md for the exact steps.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// NOTE: difficulty and status are plain strings (not enums) because
+// SQLite doesn't support enum types. Valid values are enforced in the
+// application code: difficulty is one of EASY / MEDIUM / HARD / EXPERT,
+// status is one of PENDING_REVIEW / APPROVED / REJECTED.
+
+model Admin {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime @default(now())
+}
+
+model Employee {
+  id         String        @id @default(cuid())
+  employeeId String        @unique
+  name       String
+  pinHash    String
+  active     Boolean       @default(true)
+  createdAt  DateTime      @default(now())
+  attempts   QuizAttempt[]
+}
+
+model Client {
+  id        String     @id @default(cuid())
+  name      String
+  summary   String?
+  active    Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  questions Question[]
+  attempts  QuizAttempt[]
+}
+
+model Question {
+  id            String   @id @default(cuid())
+  clientId      String
+  client        Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  difficulty    String
+  prompt        String
+  options       String   // JSON-stringified string[]
+  correctIndex  Int
+  status        String   @default("PENDING_REVIEW")
+  generatedYear Int
+  createdAt     DateTime @default(now())
+}
+
+model QuizAttempt {
+  id         String   @id @default(cuid())
+  employeeId String
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  clientId   String
+  client     Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  difficulty String
+  score      Int
+  total      Int
+  answers    String   // JSON-stringified {questionId, selectedIndex, correct}[]
+  createdAt  DateTime @default(now())
+}
