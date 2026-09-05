@@ -269,5 +269,28 @@ tr:last-child td { border-bottom: none; }
 
 .progress-track { height: 7px; background: var(--surface-2); border-radius: 100px; overflow: hidden; }
 .progress-fill { height: 100%; background: linear-gradient(90deg, var(--brand-blue), var(--brand-blue-light)); }
+.review-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+.review-option.correct-answer { border-color: var(--brand-blue); background: rgba(64,164,219,0.14); }
+.review-option.wrong-selected { border-color: var(--danger); background: rgba(239,91,98,0.12); }
+.review-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-weight: 600;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.review-tag.your-answer { background: rgba(239,91,98,0.2); color: var(--danger); }
+.review-tag.correct { background: rgba(64,164,219,0.2); color: var(--brand-blue-light); }
 
 .empty-state { text-align: center; padding: 48px 16px; color: var(--text-muted); }
