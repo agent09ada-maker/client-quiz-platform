@@ -23,6 +23,14 @@ export default async function ResultPage({ params }: { params: { attemptId: stri
 
   const pct = Math.round((attempt.score / attempt.total) * 100);
   const doneWell = pct >= 70;
+  const rank =
+    pct >= 90
+      ? { label: "Platinum", cls: "rank-platinum" }
+      : pct >= 70
+      ? { label: "Gold", cls: "rank-gold" }
+      : pct >= 50
+      ? { label: "Silver", cls: "rank-silver" }
+      : { label: "Bronze", cls: "rank-bronze" };
 
   const gradedAnswers: GradedAnswer[] = JSON.parse(attempt.answers);
   const questions = await db.question.findMany({
@@ -38,7 +46,8 @@ export default async function ResultPage({ params }: { params: { attemptId: stri
         <div className="logo-row">{doneWell ? <IconTrophy /> : <IconTarget />}</div>
         <p className="sub" style={{ marginBottom: 4 }}>{attempt.client.name} · {attempt.difficulty}</p>
         <h1 style={{ fontSize: 44 }}>{pct}%</h1>
-        <p className="sub">
+        <div className={`rank-badge ${rank.cls}`}>{rank.label} tier</div>
+        <p className="sub" style={{ marginTop: 12 }}>
           {doneWell
             ? `Nice work — ${attempt.score} out of ${attempt.total} correct.`
             : `You got ${attempt.score} out of ${attempt.total} correct. Review below to see what to brush up on.`}
