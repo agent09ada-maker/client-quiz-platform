@@ -348,3 +348,57 @@ tr:last-child td { border-bottom: none; }
 .review-tag { font-size: 11px; padding: 2px 8px; border-radius: 100px; font-weight: 600; margin-left: auto; flex-shrink: 0; }
 .review-tag.your-answer { background: rgba(229,99,111,0.2); color: var(--danger); }
 .review-tag.correct { background: rgba(64,164,219,0.2); color: var(--brand-blue-dark); }
+/* --- Animations --- */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(64,164,219,0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(64,164,219,0); }
+}
+
+.auth-card { animation: popIn 0.4s cubic-bezier(0.22,1,0.36,1); }
+.auth-card .logo-row img, .auth-card .logo-row svg { animation: floatY 3.5s ease-in-out infinite; }
+
+.card { animation: fadeInUp 0.35s ease both; }
+.card:nth-of-type(2) { animation-delay: 0.05s; }
+.card:nth-of-type(3) { animation-delay: 0.1s; }
+.card:nth-of-type(4) { animation-delay: 0.15s; }
+
+.btn { transition: all 0.15s cubic-bezier(0.22,1,0.36,1); }
+.btn:active { transform: scale(0.97); }
+.btn-primary:active { transform: scale(0.97); }
+
+.level-chip:active { transform: scale(0.95); }
+.quiz-option { transition: all 0.15s cubic-bezier(0.22,1,0.36,1); }
+.quiz-option:active { transform: scale(0.985); }
+.quiz-option.selected { animation: pulseGlow 1.4s ease-out 1; }
+
+.stat-num { animation: fadeIn 0.5s ease 0.1s both; }
+
+.rank-badge { animation: popIn 0.4s cubic-bezier(0.22,1,0.36,1) 0.2s both; }
+
+.confetti-piece {
+  position: fixed;
+  top: -10px;
+  z-index: 50;
+  pointer-events: none;
+  animation: confettiFall linear forwards;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(105vh) rotate(540deg); opacity: 0.6; }
+}

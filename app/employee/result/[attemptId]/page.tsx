@@ -2,6 +2,7 @@ import Link from "next/link";
 import { db } from "@/lib/db";
 import { requireEmployee } from "@/lib/session";
 import { IconTrophy, IconTarget } from "@/app/components/icons";
+import Confetti from "@/app/components/Confetti";
 
 type GradedAnswer = { questionId: string; selectedIndex: number; correct: boolean };
 
@@ -40,6 +41,7 @@ export default async function ResultPage({ params }: { params: { attemptId: stri
 
   return (
     <div className="auth-screen" style={{ alignItems: "flex-start", paddingTop: 48 }}>
+      {pct >= 70 && <Confetti />}
       <div className="auth-glow one" />
       <div className="auth-glow two" />
       <div className="auth-card" style={{ maxWidth: 640, textAlign: "center", zIndex: 1 }}>
