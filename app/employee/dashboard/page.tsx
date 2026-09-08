@@ -4,7 +4,12 @@ import { db } from "@/lib/db";
 import { requireEmployee } from "@/lib/session";
 import LogoutButton from "@/app/employee/LogoutButton";
 
-const DIFFICULTIES = ["EASY", "MEDIUM", "HARD", "EXPERT"] as const;
+const DIFFICULTIES = [
+  { key: "EASY", label: "Level 1 · Easy", dots: 1, cls: "lvl-easy" },
+  { key: "MEDIUM", label: "Level 2 · Medium", dots: 2, cls: "lvl-medium" },
+  { key: "HARD", label: "Level 3 · Hard", dots: 3, cls: "lvl-hard" },
+  { key: "EXPERT", label: "Level 4 · Expert", dots: 4, cls: "lvl-expert" },
+] as const;
 
 export default async function EmployeeDashboard() {
   const session = await requireEmployee();
@@ -60,12 +65,16 @@ export default async function EmployeeDashboard() {
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12 }}>
                   {DIFFICULTIES.map((d) => (
                     <Link
-                      key={d}
-                      href={`/employee/quiz/${client.id}?difficulty=${d}`}
-                      className="btn"
-                      style={{ textDecoration: "none", fontSize: 13, padding: "7px 12px" }}
+                      key={d.key}
+                      href={`/employee/quiz/${client.id}?difficulty=${d.key}`}
+                      className={`level-chip ${d.cls}`}
                     >
-                      {d[0] + d.slice(1).toLowerCase()}
+                      <span className="level-dots">
+                        {[1, 2, 3, 4].map((n) => (
+                          <span key={n} className={`level-dot ${n <= d.dots ? "on" : ""}`} />
+                        ))}
+                      </span>
+                      {d.label}
                     </Link>
                   ))}
                 </div>
